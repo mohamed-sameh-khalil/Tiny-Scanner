@@ -5,7 +5,7 @@
 #include<iostream>
 #include<fstream>
 using namespace std;
-
+bool fit_to_xml = 1;
 vector<token> tokens;
 int parse_index = 0;
 void init() {
@@ -50,7 +50,7 @@ string stmt_seq() {
 		match(";");
 		answer += statement();
 	}
-	return wrap(answer, "stmt-sequence");
+	return answer;
 }
 
 string statement() {
@@ -94,24 +94,24 @@ string repeat_stmt() {
 	return wrap(answer, "repeat");
 }
 string assign_stmt() {
-	string answer = "";
+	string answer = "", title="";
 	if (current().t == ID) {
-		answer = "(" + match(current().value) + ")"; //the identifier
+		title = "assign_" + match(current().value); //the identifier
 		match(":=");
 		answer += exp(); //expression
 	}
 	else
 		answer += "problem in assign statement not expecting " + current().t;
-	return wrap(answer, "assign");
+	return wrap(answer, title);
 }
 string read_stmt() {
 	string answer = "";
 	match("read");
 	if (current().t == ID)
-		answer += match(current().value);// the identifier
+		answer += wrap("", "read_" + match(current().value));// the read(identifier) becomes the root
 	else
 		answer += "error in read stmt not expecting " + current().value;
-	return wrap(answer, "read");
+	return answer;
 }
 string write_stmt() {
 	string answer = "";
@@ -120,72 +120,87 @@ string write_stmt() {
 	return wrap(answer, "write");
 }
 string exp() {
-	string answer = "", title = "const";
+	string answer = "";
 	answer += simple_exp(); // simple exp or term
 	if (current().value == "<" || current().value == "=") {
-		title = "op(" + comparison_op() + ")";
+		string title = "op_" + comparison_op();
 		answer += simple_exp();//other simple exp or term
+		answer = wrap(answer, title);//op is the parent for the 2 simple exp
+		//if there is an op we want it to be the parent
+		//otherwise we accept that the simple exp will handle this node completely
 	}
-	return wrap(answer, title);//title is comparison op or just a constant
+	return answer;//title is comparison op or just a constant
 }
 std::string comparison_op() {
 	string answer = "";
 	if (current().value == "<") {
 		match("<");
-		answer += "&lt";//html escape character for angle brackets
+		answer += fit_to_xml ? "lessthan" : "<";
 	}
-	else
-		answer += match("=");
+	else {
+		match("=");
+		answer += fit_to_xml ? "equals" : "=";
+	}
 	return answer;
 }
 std::string simple_exp() {
-	string answer = "";
-	answer += term();
+	string answer = "", title = "";
+	answer += term();//first term could be the root
 	while (current().value == "+" || current().value == "-") {
-		answer += match(current().value);
-		answer += term();
+		string title = "op_" + addop();//if there is addop it will be the root to the two terms
+		answer += term();//second term
+		answer = wrap(answer, title);//making the op be the root
 	}
-	return wrap(answer, "simple-exp");
+	return answer;
 }
 std::string addop() {
 	string answer = "";
-	if (current().value == "+")
-		answer += match("+");
+	if (current().value == "+") {
+		match("+");
+		answer += fit_to_xml ? "plus" : "+";
+	}
 	else
 		answer += match("-");
-	return wrap(answer, "addop");
+	return answer;
 }
 std::string term() {
 	string answer = "";
-	answer += factor();
+	answer += factor();//first factor, could be the root
 	while(current().value == "*" || current().value == "/"){
-		answer += match(current().value);
-		answer += factor();
+		string title = "op_" + mulop();//if the mulop exists it will be the root
+		answer += factor();//second factor
+		answer = wrap(answer, title);//making the mulop become the root
 	}
-	return wrap(answer, "term");
+	return answer;
 }
 std::string mulop() {
 	string answer = "";
-	if (current().value == "*")
-		answer += match("*");
-	else
-		answer += match("/");
-	return wrap(answer, "mulop");
+	if (current().value == "*") {
+		match("*");
+		answer += fit_to_xml ? "multiply" : "*";
+	}
+	else {
+		match("/");
+		answer += fit_to_xml ? "divide" : "/";
+	}
+	return answer;
 }
 std::string factor() {
 	string answer = "";
 	if (current().t == ID) {
-		answer += match(current().value);
+		string title= "ID_" + match(current().value);
+		answer = wrap("", title);//wrap the identifier as the root
 	}
 	else if (current().t == NUMBER) {
-		answer += match(current().value);
+		string title = "CONST_" + match(current().value);
+		answer = wrap("", title);//wrap the number as the root
 	}
 	else {
-		answer += match("(");
-		answer += exp();
-		answer += match("(");
+		match("(");
+		answer += exp();//exp should handle the root
+		match("(");
 	}
-	return wrap(answer, "factor");
+	return answer;
 }
 
 
