@@ -1,0 +1,66 @@
+TYPE: reserved                 	VALUE: read
+
+TYPE: identifier               	VALUE: x
+
+TYPE: special character        	VALUE: ;
+
+TYPE: reserved                 	VALUE: if
+
+TYPE: number                   	VALUE: 0
+
+TYPE: special character        	VALUE: <
+
+TYPE: identifier               	VALUE: x
+
+TYPE: reserved                 	VALUE: then
+
+TYPE: identifier               	VALUE: fact
+
+TYPE: special character        	VALUE: :=
+
+TYPE: number                   	VALUE: 1
+
+TYPE: special character        	VALUE: ;
+
+TYPE: reserved                 	VALUE: repeat
+
+TYPE: identifier               	VALUE: fact
+
+TYPE: special character        	VALUE: :=
+
+TYPE: identifier               	VALUE: fact
+
+TYPE: special character        	VALUE: *
+
+TYPE: identifier               	VALUE: x
+
+TYPE: special character        	VALUE: ;
+
+TYPE: identifier               	VALUE: x
+
+TYPE: special character        	VALUE: :=
+
+TYPE: identifier               	VALUE: x
+
+TYPE: special character        	VALUE: -
+
+TYPE: number                   	VALUE: 1
+
+TYPE: reserved                 	VALUE: until
+
+TYPE: identifier               	VALUE: x
+
+TYPE: special character        	VALUE: =
+
+TYPE: number                   	VALUE: 0
+
+TYPE: special character        	VALUE: ;
+
+TYPE: reserved                 	VALUE: write
+
+TYPE: identifier               	VALUE: fact
+
+TYPE: special character        	VALUE: ;
+
+TYPE: reserved                 	VALUE: end
+
