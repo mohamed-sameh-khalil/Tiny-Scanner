@@ -7,9 +7,9 @@ using namespace std;
 
 int main() {
 	
-	readFile("input.txt");
+	readFile("tiny.txt");
 	//printTokens();
-	printTokens("output.txt");
+	printTokens("scanned.txt");
 	//printAll();
 	
 	cin.get();
