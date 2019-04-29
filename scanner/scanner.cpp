@@ -181,7 +181,7 @@ void printTokens(string outputfile) {
 	this function reads a whole file and puts it in a string
 */
 void readFile(string filename) {
-	ifstream file("input.txt");
+	ifstream file(filename);
 	string str;
 	while (getline(file, str))
 	{
