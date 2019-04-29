@@ -27,9 +27,9 @@ struct token {
 };
 
 std::string typetostring(type);
-bool isspecial(char ch);
-bool isreserved(std::string str);
+bool isspecial(char);
+bool isreserved(std::string);
 token getToken();
 std::vector<token> getTokens();
-void readFile(std::string filename);
-void printTokens();
+void readFile(std::string);
+void printTokens(std::string);

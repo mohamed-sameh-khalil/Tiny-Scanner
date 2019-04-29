@@ -9,7 +9,7 @@ using namespace std;
 
 string source;
 int index = 0;//index of characters not tokens
-
+vector<token> token_list;
 
 /*toString of the types
 	print
@@ -24,7 +24,7 @@ string typetostring(type t) {
 	case ID:
 		return "identifier";
 	case SPECIAL:
-		return "special character";
+		return "special_character";
 	default:
 		break;
 	}
@@ -148,28 +148,32 @@ token getToken() {
 
 	return result;
 }
+void scan(){
+	while (!done()) {
+		token_list.push_back(getToken());
+	}
+}
 /*
 	returns a list of all tokens
 */
 vector<token> getTokens(){
-	vector<token> tokens;
-	while (!done()) {
-		tokens.push_back(getToken());
-	}
-	return tokens;
+	scan();
+	return token_list;
 }
 
 /*
 	this a testing function that prints tokens
 */
-void printTokens() {
-	ofstream fout("output.txt");
-	vector<token> tokens = getTokens();
-	for (auto i = tokens.begin(); i != tokens.end(); i++) {
+void printTokens(string outputfile) {
+	ofstream fout(outputfile);
+	vector<token> token_list = getTokens();
+	for (auto i = token_list.begin(); i != token_list.end(); i++) {
 		if (i->t == INVALID)
 			continue;
 		cout << "TYPE: " << setw(25) << left << typetostring(i->t) << "\tVALUE: " << i->value << endl << endl;
-		fout << "TYPE: " << setw(25) << left << typetostring(i->t) << "\tVALUE: " << i->value << endl << endl;
+		fout << typetostring(i->t) << ' ' << i->value;
+		if (i != token_list.end() - 1)
+			fout << endl;
 	}
 	fout.close();
 }

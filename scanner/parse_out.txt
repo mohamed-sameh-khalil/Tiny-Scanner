@@ -1,4 +1,4 @@
-<read_x></read_x>
+<program><read_x></read_x>
 <if><op_lessthan><CONST_0></CONST_0>
 <ID_x></ID_x>
 </op_lessthan>
@@ -19,3 +19,4 @@
 <write><ID_fact></ID_fact>
 </write>
 </if>
+</program>
