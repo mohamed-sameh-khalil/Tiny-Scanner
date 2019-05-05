@@ -12,6 +12,6 @@ int main() {
 	printTokens("scanned.txt");
 	//printAll();
 	
-	cin.get();
+	//cin.get();
 	return 0;
 }
